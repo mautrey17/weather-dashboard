@@ -10,3 +10,26 @@ h1{
 input{
     height: 38px;
 }
+
+.search-section{
+    background-color: #efefef;
+}
+
+.form{
+    padding: 20px;
+}
+
+.form-title{
+    font-weight: bold;
+}
+
+.city-history{
+    padding: 20px;
+}
+
+.test{
+    background: none;
+    border: none;
+    padding: 0;
+    text-align: left;
+}

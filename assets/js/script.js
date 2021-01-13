@@ -1,7 +1,7 @@
 //API Calls
 var city;
 
-
+//Function to call current weather
 function getWeather() {
     city = "raleigh";
     var currentWeatherQuery = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=56ecce8b9a89bb783f4aaec43e6b84a7&units=imperial";

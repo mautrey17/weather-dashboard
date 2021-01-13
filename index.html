@@ -20,28 +20,33 @@
   <body>
       <!-- container -->
       <div>
-        <header>
+        <header class="mb-5">
             <h1 class="text-center">Weather Dashboard</h1>
         </header>
         <div class="row">
             <div class="col-md-3 search-section">
-                <form action="">
-                    <label for="city-input">Search for a City:</label>
+                <form action="" class="form">
+                    <label for="city-input" class="form-title">Search for a City:</label>
                     <br>
-                    <input type="text" id="city-input" value="Raleigh">
-                    <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                    <div class="form-row">
+                      <input type="text" id="city-input" value="Raleigh" class="mr-2">
+                      <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                    </div>
+                    
                 </form>
                 <div>
-                  <div><button>Old city</button></div>
-                  <div><button>Old city</button></div>
+                  <ul class="list-group city-history">
+                    <button class="test"><li class="list-group-item">test</li></button>
+                    <button class="test"><li class="list-group-item">test</li></button>
+                  </ul>
                 </div>
                 
             </div>
             <div class="col-md-9">
-              <div class="card current-weather">
+              <div class="card current-weather mb-3">
                 
               </div>
-              <div>
+              <div class="day-forecast mb-3">
                 <h2>5 day forecast:</h2>
                 <div class="row forecast-cards">
                   <!-- insert cards here -->
