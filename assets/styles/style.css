@@ -11,6 +11,10 @@ input{
     height: 38px;
 }
 
+.hide{
+    display: none;
+}
+
 .search-section{
     background-color: #efefef;
 }

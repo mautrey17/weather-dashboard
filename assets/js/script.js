@@ -1,12 +1,13 @@
 //API Calls
 var city;
+var show = false
 
 //Function to call current weather
 function getWeather() {
-    city = "raleigh";
+    // city = "raleigh";
     var currentWeatherQuery = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=56ecce8b9a89bb783f4aaec43e6b84a7&units=imperial";
     
-    
+    $(".current-weather").empty();
     
     $.get(currentWeatherQuery).then(function(response){
         console.log(response);
@@ -50,7 +51,14 @@ function getWeather() {
 
 function getForecast(){
     var forecastQuery = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=56ecce8b9a89bb783f4aaec43e6b84a7&units=imperial"
-    var dayCount = 1
+    var dayCount = 1;
+    show = true;
+    
+
+    $(".forecast-cards").empty();
+    
+
+
     $.get(forecastQuery).then(function(response){
         console.log(response);
         for(var i=0; i<response.list.length; i+=8){
@@ -66,6 +74,7 @@ function getForecast(){
             var newCol = $("<div>").addClass("col-md-2")
             var newCard = $("<div>").addClass("card");
             var cardBody = $("<div>").addClass("card-body");
+            
 
             //create data inside cards
             var dateFuture = $("<p>").text(newDay);
@@ -77,10 +86,23 @@ function getForecast(){
             $(newCard).append(cardBody);
             $(newCol).append(newCard);
             $(".forecast-cards").append(newCol);
+            
+        }
+
+        
+        // $(".day-forecast").prepend(forecastTitle);
+        if(show){
+            $(".new-test").removeClass("hide")
         }
     })
 }
 
+$("#search-button").on("click", function(event){
+    event.preventDefault();
+    city = $("#city-input").val();
 
-getWeather();
-getForecast();
+    getWeather();
+    getForecast();
+    
+})
+
