@@ -4,7 +4,7 @@ var city;
 
 function getWeather() {
     city = "raleigh";
-    var currentWeatherQuery = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=56ecce8b9a89bb783f4aaec43e6b84a7";
+    var currentWeatherQuery = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=56ecce8b9a89bb783f4aaec43e6b84a7&units=imperial";
     
     
     
@@ -20,9 +20,10 @@ function getWeather() {
         var currentTemp = $("<p>").text("Tempurature: " + response.main.temp);
         var currentHumidity = $("<p>").text("Humidity: " + response.main.humidity + "%");
         var currentWind = $("<p>").text("Windspeed: " + response.wind.speed + " MPH");
+        // var iconTest = $("<img>").attr("src", response.weather[0].icon)
         var currentUV;
         
-
+        console.log(response.weather[0].main)
 
         
 
@@ -47,7 +48,39 @@ function getWeather() {
     
 }
 
+function getForecast(){
+    var forecastQuery = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=56ecce8b9a89bb783f4aaec43e6b84a7&units=imperial"
+    var dayCount = 1
+    $.get(forecastQuery).then(function(response){
+        console.log(response);
+        for(var i=0; i<response.list.length; i+=8){
+            var check = response.list[i];
+            console.log(check);
+
+            var newDay = dayjs().add(dayCount, 'day');
+            console.log(newDay);
+            newDay = newDay.format("MM/DD/YYYY");
+            dayCount += 1
+
+            //create html holding elements
+            var newCol = $("<div>").addClass("col-md-2")
+            var newCard = $("<div>").addClass("card");
+            var cardBody = $("<div>").addClass("card-body");
+
+            //create data inside cards
+            var dateFuture = $("<p>").text(newDay);
+            var iconFuture = $("<p>").text("insert icon here");
+            var tempFuture = $("<p>").text("Temperature: " + response.list[i].main.temp + " F")
+            var humidityFuture = $("<p>").text("Humidity: " + response.list[i].main.humidity + "%");
+
+            $(cardBody).append(dateFuture, iconFuture, tempFuture, humidityFuture);
+            $(newCard).append(cardBody);
+            $(newCol).append(newCard);
+            $(".forecast-cards").append(newCol);
+        }
+    })
+}
 
 
-
-getWeather()
+getWeather();
+getForecast();
