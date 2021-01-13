@@ -15,7 +15,7 @@ function getWeather() {
         var lat = response.coord.lat;
         var lon = response.coord.lon;
         //create HTML elements
-        var cityDisplay = $("<h2>").text(response.name + " " + dayjs().format("MM/DD/YYYY") + " picHere")
+        var cityDisplay = $("<h2>").text(response.name + " " + dayjs().format("MM/DD/YYYY") + " picHere").addClass("card-title")
         var iconSpan = $("<span>")
         var currentTemp = $("<p>").text("Tempurature: " + response.main.temp);
         var currentHumidity = $("<p>").text("Humidity: " + response.main.humidity + "%");
