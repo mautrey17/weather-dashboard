@@ -31,9 +31,13 @@ input{
     padding: 20px;
 }
 
-.test{
+.old-city{
     background: none;
     border: none;
     padding: 0;
     text-align: left;
+}
+
+.current-weather{
+    padding: 20px;
 }

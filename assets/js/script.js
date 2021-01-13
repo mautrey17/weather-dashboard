@@ -60,13 +60,13 @@ function getForecast(){
 
 
     $.get(forecastQuery).then(function(response){
-        console.log(response);
+        // console.log(response);
         for(var i=0; i<response.list.length; i+=8){
             var check = response.list[i];
-            console.log(check);
+            // console.log(check);
 
             var newDay = dayjs().add(dayCount, 'day');
-            console.log(newDay);
+            // console.log(newDay);
             newDay = newDay.format("MM/DD/YYYY");
             dayCount += 1
 
@@ -92,9 +92,22 @@ function getForecast(){
         
         // $(".day-forecast").prepend(forecastTitle);
         if(show){
-            $(".new-test").removeClass("hide")
+            $(".new-test").removeClass("hide");
+            $(".current-weather").removeClass("hide");
         }
     })
+}
+
+function addBtn(){
+    var cityName = $("#city-input").val();
+
+    //add html elements
+    var newBtn = $("<button>").addClass("old-city");
+    var newLi = $("<li>").addClass("list-group-item").attr("data-city", cityName).text(cityName);
+
+    //append to Doc
+    $(newBtn).append(newLi);
+    $(".city-history").append(newBtn);
 }
 
 $("#search-button").on("click", function(event){
@@ -103,6 +116,14 @@ $("#search-button").on("click", function(event){
 
     getWeather();
     getForecast();
-    
+    addBtn();
 })
 
+$(".old-city").on("click", function(){
+    // city = $(this).attr("data-city");
+    // console.log($(this).attr("data-city"));
+    console.log("hi")
+    
+    // getWeather();
+    // getForecast();
+})
