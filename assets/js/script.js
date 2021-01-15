@@ -46,8 +46,28 @@ function getWeather() {
             
             console.log(response2)
             var uv = response2.value
-            console.log(uv);
-            currentUV = $("<p>").text("UV Index: " + uv);
+            var uvSpan = $("<span>").addClass("uv");
+
+            //add uv class based on value
+            if(uv<3){
+                $(uvSpan).addClass("low");
+            }
+            else if(uv>=3 && uv<6){
+                $(uvSpan).addClass("moderate");
+            }
+            else if(uv>=6 && uv<8){
+                $(uvSpan).addClass("high");
+            }
+            else if(uv>=8 && uv<11){
+                $(uvSpan).addClass("very-high");
+            }
+            else if(uv>11){
+                $(uvSpan).addClass("extreme");
+            }
+
+
+            $(uvSpan).text(uv);
+            currentUV = $("<p>").text("UV Index: ").append(uvSpan);
             $(".current-weather").append(cityDisplay, currentTemp, currentHumidity, currentWind, currentUV)
         })
         
@@ -87,7 +107,7 @@ function getForecast(){
 
             //create html holding elements
             var newCol = $("<div>").addClass("col-md-2")
-            var newCard = $("<div>").addClass("card");
+            var newCard = $("<div>").addClass("card forecast");
             var cardBody = $("<div>").addClass("card-body");
             
 
@@ -124,6 +144,9 @@ function cityHandler(){
 
 function addBtn(){
     var cityName = $("#city-input").val();
+
+    $(".forecast-cards").empty();  
+    $(".current-weather").empty();  
 
     //add html elements
     var newBtn = $("<button>").addClass("old-city").attr("data-city", cityName);
