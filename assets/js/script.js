@@ -1,6 +1,26 @@
 //API Calls
 var city;
-var show = false
+var show = false;
+var prevCity;
+var lastSearch = JSON.parse(localStorage.getItem("lastCity"));
+
+console.log(lastSearch)
+
+function checkStorage(){
+    if (lastSearch){
+        city = lastSearch;
+        getWeather();
+        getForecast();
+        addBtn();
+    }
+}
+
+checkStorage();
+
+
+
+
+
 
 //Function to call current weather
 function getWeather() {
@@ -38,7 +58,12 @@ function getWeather() {
         
         console.log(response.weather[0].main)
 
-        
+        //save city to console
+        prevCity = JSON.stringify(city);
+        console.log(prevCity);
+        localStorage.setItem("lastCity", prevCity);
+
+
 
         var uvQuery = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&appid=56ecce8b9a89bb783f4aaec43e6b84a7"
 
@@ -134,19 +159,23 @@ function getForecast(){
 }
 
 function cityHandler(){
+
     city = $(this).attr("data-city");
     // console.log($(this).attr("data-city"));
-    console.log(city)
+    console.log("click")
     
-    getWeather();
-    getForecast();
+    // $(".forecast-cards").empty();  
+    // $(".current-weather").empty(); 
+
+    // getWeather();
+    // getForecast();
+    // console.log("help")
 }
 
 function addBtn(){
     var cityName = $("#city-input").val();
 
-    $(".forecast-cards").empty();  
-    $(".current-weather").empty();  
+     
 
     //add html elements
     var newBtn = $("<button>").addClass("old-city").attr("data-city", cityName);
