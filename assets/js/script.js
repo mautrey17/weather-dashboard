@@ -134,8 +134,9 @@ function getForecast(){
 }
 
 //Function to display previously searched cities when clicked in the history
-function cityHandler(){
-
+function cityHandler(event){
+    event.stopPropagation();
+    event.preventDefault();
     city = $(this).attr("data-city");
     // console.log($(this).attr("data-city"));
     console.log("click")
@@ -148,9 +149,20 @@ function cityHandler(){
     // console.log("help")
 }
 
+//event handler for search button
+$("#search-button").on("click", function(event){
+    event.preventDefault();
+    city = $("#city-input").val();
+
+    //run weather functions
+    getWeather();
+    getForecast();
+    addBtn();
+})
+
 //Function to create button when cities are searched
 function addBtn(){
-    var cityName = $("#city-input").val();
+    var cityName = city;
 
     //add html elements
     var newBtn = $("<button>").addClass("old-city").attr("data-city", cityName);
@@ -163,14 +175,4 @@ function addBtn(){
     $(".old-city").on("click", cityHandler)
 }
 
-//event handler for search button
-$("#search-button").on("click", function(event){
-    event.preventDefault();
-    city = $("#city-input").val();
-
-    //run weather functions
-    getWeather();
-    getForecast();
-    addBtn();
-})
 
