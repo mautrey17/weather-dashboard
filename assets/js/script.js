@@ -1,11 +1,10 @@
-//API Calls
+//Global variables
 var city;
 var show = false;
 var prevCity;
 var lastSearch = JSON.parse(localStorage.getItem("lastCity"));
 
-console.log(lastSearch)
-
+//Function to check storage and display last searched city
 function checkStorage(){
     if (lastSearch){
         city = lastSearch;
@@ -14,31 +13,23 @@ function checkStorage(){
         addBtn();
     }
 }
-
 checkStorage();
-
-
-
-
-
 
 //Function to call current weather
 function getWeather() {
-    // city = "raleigh";
+    //AJAX query and variable for icon query
     var currentWeatherQuery = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=56ecce8b9a89bb783f4aaec43e6b84a7&units=imperial";
     var weatherIcon;
     
-    
-    
+    //Clear previous entry
     $(".current-weather").empty();
     
+    //AJAX call to API
     $.get(currentWeatherQuery).then(function(response){
-        console.log(response);
-
+    
+        //get icon data and create query
         weatherIcon = response.weather[0].icon;
         var imgQuery = "http://openweathermap.org/img/wn/" + weatherIcon + "@2x.png";
-
-        console.log(imgQuery);
 
         //create location vars for other calls
         var lat = response.coord.lat;
@@ -50,26 +41,20 @@ function getWeather() {
         var currentTemp = $("<p>").text("Tempurature: " + response.main.temp);
         var currentHumidity = $("<p>").text("Humidity: " + response.main.humidity + "%");
         var currentWind = $("<p>").text("Windspeed: " + response.wind.speed + " MPH");
-        // var iconTest = $("<img>").attr("src", response.weather[0].icon)
         var currentUV;
 
+        //Add icon to title
         $(iconSpan).append(currentImg);
         $(cityDisplay).append(iconSpan)
-        
-        console.log(response.weather[0].main)
 
         //save city to console
         prevCity = JSON.stringify(city);
-        console.log(prevCity);
         localStorage.setItem("lastCity", prevCity);
 
-
-
+        //UV Query and AJAX
         var uvQuery = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&appid=56ecce8b9a89bb783f4aaec43e6b84a7"
 
         $.get(uvQuery).then(function(response2){
-            
-            console.log(response2)
             var uv = response2.value
             var uvSpan = $("<span>").addClass("uv");
 
@@ -90,43 +75,34 @@ function getWeather() {
                 $(uvSpan).addClass("extreme");
             }
 
-
+            //Format UV data
             $(uvSpan).text(uv);
             currentUV = $("<p>").text("UV Index: ").append(uvSpan);
+
+            //Append all elements to document
             $(".current-weather").append(cityDisplay, currentTemp, currentHumidity, currentWind, currentUV)
-        })
-        
-        
-        // console.log(uv)
-
-
-        //append to document
-    
-    })
-    
+        })    
+    })   
 }
 
+//Function to get forecast data and display
 function getForecast(){
     var forecastQuery = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=56ecce8b9a89bb783f4aaec43e6b84a7&units=imperial"
     var dayCount = 1;
     show = true;
     
-    
-
+    //Clear previous forecast cards
     $(".forecast-cards").empty();
     
-
-
+    //AJAX call
     $.get(forecastQuery).then(function(response){
-        console.log(response);
+        //For loop to get the following day's weather
         for(var i=0; i<response.list.length; i+=8){
-            var check = response.list[i];
             var weatherIcon = response.list[i].weather[0].icon;
             var imgQuery = "http://openweathermap.org/img/wn/" + weatherIcon + "@2x.png"
-            console.log(check);
-
+            
+            //Format date
             var newDay = dayjs().add(dayCount, 'day');
-            // console.log(newDay);
             newDay = newDay.format("MM/DD/YYYY");
             dayCount += 1
 
@@ -135,13 +111,13 @@ function getForecast(){
             var newCard = $("<div>").addClass("card forecast");
             var cardBody = $("<div>").addClass("card-body");
             
-
             //create data inside cards
             var dateFuture = $("<p>").text(newDay);
             var iconFuture = $("<img>").attr("src", imgQuery);
             var tempFuture = $("<p>").text("Temperature: " + response.list[i].main.temp + " F")
             var humidityFuture = $("<p>").text("Humidity: " + response.list[i].main.humidity + "%");
 
+            //Append new elements to document
             $(cardBody).append(dateFuture, iconFuture, tempFuture, humidityFuture);
             $(newCard).append(cardBody);
             $(newCol).append(newCard);
@@ -149,8 +125,7 @@ function getForecast(){
             
         }
 
-        
-        // $(".day-forecast").prepend(forecastTitle);
+        //Display hidden elements if they have been set to be turned on
         if(show){
             $(".new-test").removeClass("hide");
             $(".current-weather").removeClass("hide");
@@ -158,6 +133,7 @@ function getForecast(){
     })
 }
 
+//Function to display previously searched cities when clicked in the history
 function cityHandler(){
 
     city = $(this).attr("data-city");
@@ -172,10 +148,9 @@ function cityHandler(){
     // console.log("help")
 }
 
+//Function to create button when cities are searched
 function addBtn(){
     var cityName = $("#city-input").val();
-
-     
 
     //add html elements
     var newBtn = $("<button>").addClass("old-city").attr("data-city", cityName);
@@ -188,10 +163,12 @@ function addBtn(){
     $(".old-city").on("click", cityHandler)
 }
 
+//event handler for search button
 $("#search-button").on("click", function(event){
     event.preventDefault();
     city = $("#city-input").val();
 
+    //run weather functions
     getWeather();
     getForecast();
     addBtn();
