@@ -31,11 +31,15 @@ input{
     padding: 20px;
 }
 
-.old-city{
+/* .old-city{
     background: none;
     border: none;
     padding: 0;
     text-align: left;
+} */
+
+.old-city {
+    cursor: pointer;
 }
 
 .current-weather{
