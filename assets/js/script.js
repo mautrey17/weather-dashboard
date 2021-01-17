@@ -2,7 +2,6 @@
 var city;
 var cities = JSON.parse(localStorage.getItem("cities")) || [];
 var show = false;
-var prevCity;
 var pushCity = true;
 var lastSearch = JSON.parse(localStorage.getItem("lastCity"));
 
@@ -13,45 +12,32 @@ function checkStorage(){
         getWeather();
         getForecast();
         addBtn();
-
-        //do not re-add city to search history
-        // var doubleEntry = cities.length - 1;
-        // console.log(doubleEntry)
-        // cities.splice()
     }
 }
 checkStorage();
 
+//Check to see if searched city is already in history
 function checkForDouble(){
+    //loop through existing entries
     for(var i=0; i<cities.length; i++){
         var cityCheck = city.toLowerCase();
         var cityCheckExist = cities[i].toLowerCase();
-        console.log(cityCheckExist);
-        console.log(cityCheck);
+
         if(cityCheckExist === cityCheck){
             pushCity = false;
-            console.log("Do not push");
         }
-        else{
-            console.log("do push")
-            
-        }
-        console.log(pushCity);
     }
-    console.log(cities.length)
-    // cities.push(city);
-    
+
+    //if city does not already exist, push to array and save to local storage
     if(pushCity || (cities.length < 1)) {
-        console.log("its working")
+
         cities.push(city);
         localStorage.setItem("cities", JSON.stringify(cities));
     }
-    console.log("function running")
+
+    //reset var checking for duplicates
     pushCity = true;
 }
-
-
-
 
 //Function to call current weather
 function getWeather() {
@@ -80,19 +66,6 @@ function getWeather() {
         var currentHumidity = $("<p>").text("Humidity: " + response.main.humidity + "%");
         var currentWind = $("<p>").text("Windspeed: " + response.wind.speed + " MPH");
         var currentUV;
-
-        //Add icon to title
-        $(iconSpan).append(currentImg);
-        $(cityDisplay).append(iconSpan)
-
-        //save city to console
-        // prevCity = JSON.stringify(city);
-        console.log(city);
-        
-        //check if city is already saved
-        
-        console.log(pushCity)
-        
 
         //UV Query and AJAX
         var uvQuery = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&appid=56ecce8b9a89bb783f4aaec43e6b84a7"
@@ -127,10 +100,8 @@ function getWeather() {
             
             //check for previous entry
             checkForDouble();
-            
-            // cities.push("test")
-            console.log(cities);
 
+            //Save the last searched city
             localStorage.setItem("lastCity", JSON.stringify(city));
             
         })    
@@ -209,19 +180,8 @@ function addBtn(){
 }
 
 //Function to display previously searched cities when clicked in the history
-$(".city-history").on("click", "li", function(event){
-    // event.stopPropagation();
-    // event.preventDefault();
-
+$(".city-history").on("click", "li", function(){
     city = $(this).attr("data-city");
-    // console.log($(this).attr("data-city"));
-    console.log("click", city);
-    
-    // $(".forecast-cards").empty();  
-    // $(".current-weather").empty(); 
-
     getWeather();
     getForecast();
-    // console.log("help")
 });
-
