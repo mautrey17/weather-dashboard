@@ -53,7 +53,7 @@ function getWeather() {
     
         //get icon data and create query
         weatherIcon = response.weather[0].icon;
-        var imgQuery = "http://openweathermap.org/img/wn/" + weatherIcon + "@2x.png";
+        var imgQuery = "https://openweathermap.org/img/wn/" + weatherIcon + "@2x.png";
 
         //create location vars for other calls
         var lat = response.coord.lat;
