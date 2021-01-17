@@ -122,7 +122,7 @@ function getForecast(){
         //For loop to get the following day's weather
         for(var i=0; i<response.list.length; i+=8){
             var weatherIcon = response.list[i].weather[0].icon;
-            var imgQuery = "http://openweathermap.org/img/wn/" + weatherIcon + "@2x.png"
+            var imgQuery = "https://openweathermap.org/img/wn/" + weatherIcon + "@2x.png"
             
             //Format date
             var newDay = dayjs().add(dayCount, 'day');
