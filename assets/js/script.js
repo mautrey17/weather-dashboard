@@ -3,23 +3,55 @@ var city;
 var cities = JSON.parse(localStorage.getItem("cities")) || [];
 var show = false;
 var prevCity;
-// var lastSearch = JSON.parse(localStorage.getItem("lastCity"));
+var pushCity = true;
+var lastSearch = JSON.parse(localStorage.getItem("lastCity"));
 
 //Function to check storage and display last searched city
 function checkStorage(){
     if (cities.length > 0){
-        city = cities[0];
+        city = lastSearch;
         getWeather();
         getForecast();
         addBtn();
 
         //do not re-add city to search history
-        var doubleEntry = cities.length - 1;
-        console.log(doubleEntry)
-        cities.splice()
+        // var doubleEntry = cities.length - 1;
+        // console.log(doubleEntry)
+        // cities.splice()
     }
 }
 checkStorage();
+
+function checkForDouble(){
+    for(var i=0; i<cities.length; i++){
+        var cityCheck = city.toLowerCase();
+        var cityCheckExist = cities[i].toLowerCase();
+        console.log(cityCheckExist);
+        console.log(cityCheck);
+        if(cityCheckExist === cityCheck){
+            pushCity = false;
+            console.log("Do not push");
+        }
+        else{
+            console.log("do push")
+            
+        }
+        console.log(pushCity);
+    }
+    console.log(cities.length)
+    // cities.push(city);
+    
+    if(pushCity || (cities.length < 1)) {
+        console.log("its working")
+        cities.push(city);
+        localStorage.setItem("cities", JSON.stringify(cities));
+    }
+    console.log("function running")
+    pushCity = true;
+}
+
+
+
 
 //Function to call current weather
 function getWeather() {
@@ -55,8 +87,12 @@ function getWeather() {
 
         //save city to console
         // prevCity = JSON.stringify(city);
-        cities.push(city);
-        localStorage.setItem("cities", JSON.stringify(cities));
+        console.log(city);
+        
+        //check if city is already saved
+        
+        console.log(pushCity)
+        
 
         //UV Query and AJAX
         var uvQuery = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&appid=56ecce8b9a89bb783f4aaec43e6b84a7"
@@ -88,6 +124,15 @@ function getWeather() {
 
             //Append all elements to document
             $(".current-weather").append(cityDisplay, currentTemp, currentHumidity, currentWind, currentUV)
+            
+            //check for previous entry
+            checkForDouble();
+            
+            // cities.push("test")
+            console.log(cities);
+
+            localStorage.setItem("lastCity", JSON.stringify(city));
+            
         })    
     })   
 }
